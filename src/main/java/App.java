@@ -11,10 +11,22 @@ public class App {
         s.dynamicObstacles = true;
         s.dynamicObstacleMoveProb = 0.25;
         s.maxTicks = 40;
-        s.algo = Settings.Algorithm.ASTAR; // ASTAR or DIJKSTRA
         s.seed = 42L;
 
-        Simulation sim = new Simulation(s, new ConsoleRenderer());
-        sim.run();
+        // AStar
+        s.algo = Settings.Algorithm.ASTAR; // ASTAR or DIJKSTRA
+        Simulation simASTAR = new Simulation(s, new ConsoleRenderer());
+        String ASTARMetrics = simASTAR.run();
+
+        // Dijkstra
+        s.algo = Settings.Algorithm.DIJKSTRA; // ASTAR or DIJKSTRA
+        Simulation simDIJKSTRA = new Simulation(s, new ConsoleRenderer());
+        String DikjstraMetrics = simDIJKSTRA.run();
+
+        // sum
+        System.out.print("A* Metrics");
+        System.out.print(ASTARMetrics);
+        System.out.print("Dikjstra Metrics");
+        System.out.print(DikjstraMetrics);
     }
 }

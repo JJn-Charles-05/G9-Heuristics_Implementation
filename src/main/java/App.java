@@ -13,6 +13,8 @@ public class App {
         s.maxTicks = 40;
         s.seed = 42L;
 
+
+        // testing metrics
         // AStar
         s.algo = Settings.Algorithm.ASTAR; // ASTAR or DIJKSTRA
         Simulation simASTAR = new Simulation(s, new ConsoleRenderer());

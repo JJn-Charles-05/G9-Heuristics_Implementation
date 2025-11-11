@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/G9-Heuristics_Implementation.iml" filepath="$PROJECT_DIR$/.idea/G9-Heuristics_Implementation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CS4306Project.iml" filepath="$PROJECT_DIR$/CS4306Project.iml" />
       <module fileurl="file://$PROJECT_DIR$/Implementation Build/Implementation Build.iml" filepath="$PROJECT_DIR$/Implementation Build/Implementation Build.iml" />
     </modules>
   </component>

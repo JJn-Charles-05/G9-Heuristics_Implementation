@@ -6,6 +6,7 @@ import algo.Pathfinder;
 import core.Grid;
 import core.PathResult;
 import core.Settings;
+import core.SimulationResult;
 import metrics.Metrics;
 import ui.ConsoleRenderer;
 
@@ -31,28 +32,39 @@ public class Simulation {
         };
     }
 
-    public void run(){
+    public SimulationResult run(){
         System.out.println("=== Group 9 Comparative Simulation ===");
         System.out.println("Algorithm: " + pf.name());
         System.out.printf("Grid: %dx%d, density=%.2f, dynamic=%s, ticks=%d%n",
                 s.width, s.height, s.obstacleDensity, s.dynamicObstacles, s.maxTicks);
         System.out.printf("Start=(%d,%d), Goal=(%d,%d)%n%n", s.start.x, s.start.y, s.goal.x, s.goal.y);
+        PathResult r = null;
+        long startTime = System.nanoTime();
 
         for (int tick = 1; tick <= s.maxTicks; tick++){
             if (s.dynamicObstacles) grid.jiggleObstacles(s.dynamicObstacleMoveProb);
             grid.setBlocked(s.start.x, s.start.y, false);
             grid.setBlocked(s.goal.x,  s.goal.y,  false);
 
-            PathResult r = pf.findPath(grid, s.start.x, s.start.y, s.goal.x, s.goal.y);
+            r = pf.findPath(grid, s.start.x, s.start.y, s.goal.x, s.goal.y);
 
             System.out.println("--- Tick " + tick + " ---");
             renderer.draw(grid, r.path);
             System.out.println(Metrics.summarize(r));
             System.out.println();
 
-            try { Thread.sleep(150); } catch (InterruptedException ignored) {}
+            try { Thread.sleep(50); } catch (InterruptedException ignored) {}
         }
+        long endTime = System.nanoTime();
+        long totalRunTimeMillis = (endTime - startTime) / 1_000_000;
         System.out.println("=== Done ===");
+        SimulationResult simResult;
+        simResult = new SimulationResult(totalRunTimeMillis, -1, -1);
+        if(r != null) {
+            simResult = new SimulationResult(totalRunTimeMillis, r.nodesExpanded, r.path.size());
+        }
+
+        return simResult;
     }
 }
 

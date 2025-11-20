@@ -1,4 +1,5 @@
 import core.Settings;
+import sim.BatchSimulation;
 import sim.Simulation;
 import ui.ConsoleRenderer;
 import javafx.scene.Scene;
@@ -30,6 +31,10 @@ public class App extends Application {
         s.seed = 42L;
 
         Simulation sim = new Simulation(s, new ConsoleRenderer());
-        sim.run();
+        System.out.println(sim.run());
+
+        System.out.println("performing batch simulations");
+        BatchSimulation batch = new BatchSimulation();
+        batch.RunSimulations(10);
     }
 }

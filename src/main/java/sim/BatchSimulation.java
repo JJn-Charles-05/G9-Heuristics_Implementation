@@ -13,6 +13,8 @@ public class BatchSimulation
     public long ASTAR_Total_Time;
     public long DIJKSTRA_Total_Time;
 
+    public Settings settings;
+
     // avg path length
     public double ASTAR_Average_Path;
     public double DIJKSTRA_Average_Path;
@@ -25,16 +27,28 @@ public class BatchSimulation
     public double ASTAR_Average_Nodes;
     public double DIJKSTRA_Average_Nodes;
 
+    public BatchSimulation(Settings s)
+    {
+        settings = s;
+    }
+    public BatchSimulation()
+    {
+
+    }
+
     public void RunSimulations(int numberOfSimulations)
     {
-        Settings s = new Settings();
         Simulation sim;
-        s.width = 90;
-        s.height = 90;
-        s.obstacleDensity = 0.18;
-        s.dynamicObstacles = true;
-        s.dynamicObstacleMoveProb = 0.25;
-        s.maxTicks = 1;
+        if(settings == null)
+        {
+            settings = new Settings();
+            settings.width = 100;
+            settings.height = 100;
+            settings.obstacleDensity = 0.28;
+            settings.dynamicObstacles = true;
+            settings.dynamicObstacleMoveProb = 0.25;
+            settings.maxTicks = 1;
+        }
 
         Random rand = new Random();
         ArrayList<Long> seeds = new ArrayList<Long>();
@@ -44,22 +58,22 @@ public class BatchSimulation
         }
         ArrayList<SimulationResult> ASTARresults = new ArrayList<SimulationResult>();
         ArrayList<SimulationResult> DIJKSTRAresults = new ArrayList<SimulationResult>();
-        s.algo = Settings.Algorithm.ASTAR;
+        settings.algo = Settings.Algorithm.ASTAR;
         long startTimeASTAR = System.nanoTime();
         for(int i = 0; i < numberOfSimulations; i++)
         {
-            s.seed = seeds.get(i);
-            sim = new Simulation(s, new ConsoleRenderer());
+            settings.seed = seeds.get(i);
+            sim = new Simulation(settings, new ConsoleRenderer());
             ASTARresults.add(sim.run());
         }
         long endTimeASTAR = System.nanoTime();
 
-        s.algo = Settings.Algorithm.DIJKSTRA;
+        settings.algo = Settings.Algorithm.DIJKSTRA;
         long startTimeDijkstra = System.nanoTime();
         for(int i = 0; i < numberOfSimulations; i++)
         {
-            s.seed = seeds.get(i);
-            sim = new Simulation(s, new ConsoleRenderer());
+            settings.seed = seeds.get(i);
+            sim = new Simulation(settings, new ConsoleRenderer());
             DIJKSTRAresults.add(sim.run());
         }
         long endTimeDijkstra = System.nanoTime();

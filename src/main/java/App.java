@@ -21,7 +21,7 @@ public class App extends Application {
             System.out.println(getClass().getResource("/heuristicCompareGUI.fxml"));
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/heuristicCompareGUI.fxml"));
             Parent root = loader.load();
-            Scene scene = new Scene(root, 600, 650);
+            Scene scene = new Scene(root);
             stage.setTitle("Heuristics Comparison GUI");
             stage.setScene(scene);
             stage.show();

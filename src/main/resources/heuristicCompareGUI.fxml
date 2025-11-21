@@ -3,12 +3,16 @@
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="725.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.MainController">
    <children>
-      <Label id="titleLabel" fx:id="titleLabel" layoutX="229.0" layoutY="14.0" text="Heuristics Comparison GUI" />
-      <Button id="runSimButton" fx:id="runSimButton" layoutX="398.0" layoutY="73.0" mnemonicParsing="false" onAction="#runSimulations" text="Run Sim" />
-      <BarChart id="runtimeBarChart" fx:id="runtimeBarChart" layoutX="72.0" layoutY="363.0" prefHeight="162.0" prefWidth="184.0" title="Total Runtime">
+      <Label id="titleLabel" fx:id="titleLabel" layoutX="271.0" layoutY="14.0" text="Heuristics Comparison GUI">
+         <font>
+            <Font size="26.0" />
+         </font></Label>
+      <Button id="runSimButton" fx:id="runSimButton" layoutX="73.0" layoutY="602.0" mnemonicParsing="false" onAction="#runSimulations" text="Run Sim" />
+      <BarChart id="runtimeBarChart" fx:id="runtimeBarChart" layoutX="375.0" layoutY="337.0" prefHeight="162.0" prefWidth="184.0" title="Avg Runtime">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>
@@ -16,7 +20,7 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </BarChart>
-      <BarChart id="nodesBarChart" fx:id="nodesBarChart" layoutX="332.0" layoutY="363.0" prefHeight="162.0" prefWidth="184.0" title="Num. Nodes">
+      <BarChart id="nodesBarChart" fx:id="nodesBarChart" layoutX="635.0" layoutY="337.0" prefHeight="162.0" prefWidth="184.0" title="Num. Nodes">
          <xAxis>
             <CategoryAxis side="BOTTOM" />
          </xAxis>
@@ -24,7 +28,7 @@
             <NumberAxis side="LEFT" />
          </yAxis>
       </BarChart>
-      <BarChart id="pathLenBarChart" fx:id="pathLenBarChart" layoutX="68.0" layoutY="547.0" prefHeight="162.0" prefWidth="184.0" title="Path Lenghts">
+      <BarChart id="pathLenBarChart" fx:id="pathLenBarChart" layoutX="371.0" layoutY="521.0" prefHeight="162.0" prefWidth="184.0" title="Path Lenghts">
          <xAxis>
             <CategoryAxis side="BOTTOM" />
          </xAxis>
@@ -32,7 +36,7 @@
             <NumberAxis side="LEFT" />
          </yAxis>
       </BarChart>
-      <BarChart id="successBarChart" fx:id="successBarChart" layoutX="328.0" layoutY="547.0" prefHeight="162.0" prefWidth="184.0" title="Num. Successes">
+      <BarChart id="successBarChart" fx:id="successBarChart" layoutX="631.0" layoutY="521.0" prefHeight="162.0" prefWidth="184.0" title="Num. Successes">
          <xAxis>
             <CategoryAxis side="BOTTOM" />
          </xAxis>
@@ -40,10 +44,10 @@
             <NumberAxis side="LEFT" />
          </yAxis>
       </BarChart>
-      <TextArea id="textArea" fx:id="textArea" layoutX="50.0" layoutY="148.0" prefHeight="175.0" prefWidth="500.0" />
-      <RadioButton id="singleSimRadio" fx:id="singleSimRadio" layoutX="103.0" layoutY="65.0" mnemonicParsing="false" text="Single Simulation" />
-      <RadioButton id="batchSimRadio" fx:id="batchSimRadio" layoutX="103.0" layoutY="98.0" mnemonicParsing="false" text="Batch Simulation" />
-      <VBox layoutX="672.0" layoutY="174.0" prefHeight="333.0" prefWidth="158.0">
+      <TextArea id="textArea" fx:id="textArea" layoutX="464.0" layoutY="97.0" prefHeight="209.0" prefWidth="290.0" />
+      <RadioButton id="singleSimRadio" fx:id="singleSimRadio" layoutX="24.0" layoutY="111.0" mnemonicParsing="false" onAction="#setSingleSimRadio" text="Single Simulation" />
+      <RadioButton id="batchSimRadio" fx:id="batchSimRadio" layoutX="24.0" layoutY="144.0" mnemonicParsing="false" onAction="#setBatchSimRadio" text="Batch Simulation" />
+      <VBox layoutX="24.0" layoutY="175.0" prefHeight="408.0" prefWidth="219.0" spacing="4.0">
          <children>
              <VBox prefHeight="58.0" prefWidth="162.0">
                  <children>
@@ -59,7 +63,7 @@
              </VBox>
              <VBox prefHeight="58.0" prefWidth="162.0">
                  <children>
-                     <Label fx:id="uiODLabel" text="ObstacleDensity" />
+                     <Label fx:id="uiODLabel" text="ObstacleDensity (0 &lt;= x &lt; 1)" />
                      <TextField fx:id="odInput" prefHeight="25.0" prefWidth="67.0" />
                  </children>
              </VBox>
@@ -71,7 +75,7 @@
              </VBox>
              <VBox prefHeight="58.0" prefWidth="162.0">
                  <children>
-                     <Label fx:id="uiDynamicProbLabel" text="dynamicObstacleMoveProb" />
+                     <Label fx:id="uiDynamicProbLabel" prefHeight="17.0" prefWidth="220.0" text="dynamicObstacleMoveProb (0 &lt;= x &lt; 1)" />
                      <TextField fx:id="dynamicProbInput" prefHeight="25.0" prefWidth="67.0" />
                  </children>
              </VBox>
@@ -84,10 +88,10 @@
              <VBox prefHeight="58.0" prefWidth="162.0">
                  <children>
                      <Label fx:id="uiAlgoLabel" text="algo" />
-                  <MenuButton fx:id="algoInput" mnemonicParsing="false" text="MenuButton">
+                  <MenuButton fx:id="algoInput" mnemonicParsing="false" text="A Star">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Action 1" />
-                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                      <MenuItem mnemonicParsing="false" onAction="#astarPressed" text="A Star" />
+                      <MenuItem mnemonicParsing="false" onAction="#dijkstrasPressed" text="Dijkstras" />
                     </items>
                   </MenuButton>
                  </children>
@@ -96,9 +100,26 @@
                  <children>
                      <Label fx:id="uiSeedLabel" text="seed" />
                      <TextField id="seedInput" fx:id="seedInput" prefHeight="25.0" prefWidth="67.0" />
+                  <VBox prefHeight="200.0" prefWidth="100.0" />
+                 </children>
+             </VBox>
+             <VBox prefHeight="58.0" prefWidth="162.0">
+                 <children>
+                     <Label fx:id="uiNumBatchesLabel" text="numBatches" />
+                     <TextField id="numBatchesInput" fx:id="numBatchesInput" prefHeight="25.0" prefWidth="67.0" />
+                     <VBox prefHeight="200.0" prefWidth="100.0" />
                  </children>
              </VBox>
          </children>
       </VBox>
+      <Label layoutX="42.0" layoutY="72.0" text="Program Settings">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+      <Label layoutX="480.0" layoutY="72.0" text="Simulation Visual (Single Sim. ONLY)">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

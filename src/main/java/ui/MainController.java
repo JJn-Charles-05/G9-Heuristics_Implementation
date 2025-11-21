@@ -1,8 +1,11 @@
 package ui;
 
 import core.Settings;
+import core.SimulationResult;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import sim.BatchSimulation;
 import sim.Simulation;
 import ui.ConsoleRenderer;
@@ -43,9 +46,18 @@ public class MainController {
     @FXML
     private Label uiSeedLabel;
 
-    // All UI Tools
+    @FXML
+    private Label uiNumBatchesLabel;
+
+    // All Input Tools
     @FXML
     private Button runSimButton;
+
+    @FXML
+    private RadioButton singleSimRadio;
+
+    @FXML
+    private RadioButton batchSimRadio;
 
     @FXML
     private TextField widthInput;
@@ -71,6 +83,9 @@ public class MainController {
     @FXML
     private TextField seedInput;
 
+    @FXML
+    private TextField numBatchesInput;
+
     // Program-Generated
     @FXML
     private TextArea textArea;
@@ -87,60 +102,171 @@ public class MainController {
     @FXML
     private BarChart<String, Number> successBarChart;
 
+    @FXML
+    private void setSingleSimRadio (ActionEvent event)
+    {
+        batchSimRadio.setSelected(false);
+        runtimeBarChart.getData().clear();
+        nodesBarChart.getData().clear();
+        pathLenBarChart.getData().clear();
+        successBarChart.getData().clear();
+        seedInput.setDisable(false);
+        uiSeedLabel.setDisable(false);
+        numBatchesInput.setDisable(true);
+        uiNumBatchesLabel.setDisable(true);
+    }
 
-    /*@FXML
+    @FXML
+    private void setBatchSimRadio (ActionEvent event)
+    {
+        singleSimRadio.setSelected(false);
+        runtimeBarChart.getData().clear();
+        nodesBarChart.getData().clear();
+        pathLenBarChart.getData().clear();
+        successBarChart.getData().clear();
+        seedInput.setDisable(true);
+        uiSeedLabel.setDisable(true);
+        numBatchesInput.setDisable(false);
+        uiNumBatchesLabel.setDisable(false);
+    }
+
+    @FXML
+    private void astarPressed (){
+        algoInput.setText("A star");
+    }
+
+    @FXML
+    private void dijkstrasPressed (){
+        algoInput.setText("Dijkstras");
+    }
+
+    private int simnum;
+
+    @FXML
     private void initialize() {
+        simnum = 0;
+        textArea.setFont(Font.font("Consolas", FontWeight.BOLD, 14));
         // runSimButton.setOnAction(this::runSimulations);
-    }*/
+    }
 
     // Method to run the Sim; used for button press functionality
     @FXML
     private void runSimulations (ActionEvent event) {
-        /*Settings s = new Settings();
-        s.width = 20;
-        s.height = 12;
-        s.obstacleDensity = 0.18;
-        s.dynamicObstacles = true;
-        s.dynamicObstacleMoveProb = 0.25;
-        s.maxTicks = 40;
-        s.algo = Settings.Algorithm.ASTAR; // ASTAR or DIJKSTRA
-        s.seed = 42L;*/
+        try {
+            Settings s = new Settings();
+            s.width = Integer.parseInt(widthInput.getText());
+            s.height = Integer.parseInt(heightInput.getText());
+            s.obstacleDensity = Double.parseDouble(odInput.getText());
+            s.dynamicObstacles = dynamicInput.isSelected();
+            s.dynamicObstacleMoveProb = Double.parseDouble(dynamicProbInput.getText());
+            s.maxTicks = Integer.parseInt(ticksInput.getText());
+            // ASTAR or DIJKSTRA
+            if (algoInput.getText().contains("Dijkstras")) {
+                s.algo = Settings.Algorithm.DIJKSTRA;
+            } else {
+                s.algo = Settings.Algorithm.ASTAR;
+            }
+            s.seed = Long.parseLong(seedInput.getText());
+            BatchSimulation batch = new BatchSimulation(s);
+            if (singleSimRadio.isSelected()) {
+                Simulation sim = new Simulation(s, new ConsoleRenderer(textArea));
+                SimulationResult simresults;
+                simresults = sim.run();
+                simnum += 1;
 
-        // Simulation sim = new Simulation(s, new ConsoleRenderer(textArea));
-        //sim.run(); returns sim results
-        //System.out.println(sim.run());
+                if(algoInput.getText().contains("Dijkstras")) {
+                    // Runtime BarChart
+                    XYChart.Series<String, Number> runtimeSeries = new XYChart.Series<>();
+                    runtimeSeries.setName("Runtime (ms)");
+                    runtimeSeries.getData().add(new XYChart.Data("Dijkstras", simresults.totalRunTimeMillis));
+                    runtimeBarChart.getData().add(runtimeSeries);
+
+                    // Nodes BarChart
+                    XYChart.Series<String, Number> NodesSeries = new XYChart.Series<>();
+                    NodesSeries.setName("Nodes");
+                    NodesSeries.getData().add(new XYChart.Data("Dijkstras", simresults.totalNodesExpanded));
+
+                    nodesBarChart.getData().add(NodesSeries);
+
+                    // Path Length BarChart
+                    XYChart.Series<String, Number> PathSeries = new XYChart.Series<>();
+                    PathSeries.setName("Path");
+                    PathSeries.getData().add(new XYChart.Data("Dijkstras", simresults.pathLength));
+                    pathLenBarChart.getData().add(PathSeries);
 
 
-        System.out.println("performing batch simulations");
-        BatchSimulation batch = new BatchSimulation();
-        batch.RunSimulations(10);
+                    // Success BarChart
+                    XYChart.Series<String, Number> SuccessSeries = new XYChart.Series<>();
+                    SuccessSeries.setName("Success");
+                    SuccessSeries.getData().add(new XYChart.Data("Dijkstras", simresults.isReachedGoal() ? 1 : 0));
+                    successBarChart.getData().add(SuccessSeries);
+                }
+                else
+                {
+                    XYChart.Series<String, Number> runtimeSeries = new XYChart.Series<>();
+                    runtimeSeries.setName("Runtime (ms)");
+                    runtimeSeries.getData().add(new XYChart.Data("A Star", simresults.totalRunTimeMillis));
+                    runtimeBarChart.getData().add(runtimeSeries);
 
-        // Runtime BarChart
-        XYChart.Series<String, Number> runtimeSeries = new XYChart.Series<>();
-        runtimeSeries.setName("Avg. Runtime (ms)");
-        runtimeSeries.getData().add(new XYChart.Data("ASTAR", batch.ASTAR_Total_Time ));
-        runtimeSeries.getData().add(new XYChart.Data("Dijkstra", batch.DIJKSTRA_Total_Time));
-        runtimeBarChart.getData().add(runtimeSeries);
+                    // Nodes BarChart
+                    XYChart.Series<String, Number> NodesSeries = new XYChart.Series<>();
+                    NodesSeries.setName("Nodes");
+                    NodesSeries.getData().add(new XYChart.Data("A Star", simresults.totalNodesExpanded));
 
-        // Nodes BarChart
-        XYChart.Series<String, Number> NodesSeries = new XYChart.Series<>();
-        NodesSeries.setName("Avg. Nodes");
-        NodesSeries.getData().add(new XYChart.Data("ASTAR", batch.ASTAR_Average_Nodes));
-        NodesSeries.getData().add(new XYChart.Data("Dijkstra", batch.DIJKSTRA_Average_Nodes));
-        nodesBarChart.getData().add(NodesSeries);
+                    nodesBarChart.getData().add(NodesSeries);
 
-        // Path Length BarChart
-        XYChart.Series<String, Number> PathSeries = new XYChart.Series<>();
-        PathSeries.setName("Avg. Path");
-        PathSeries.getData().add(new XYChart.Data("ASTAR", batch.ASTAR_Average_Path));
-        PathSeries.getData().add(new XYChart.Data("Dijkstra", batch.DIJKSTRA_Average_Path));
-        pathLenBarChart.getData().add(PathSeries);
+                    // Path Length BarChart
+                    XYChart.Series<String, Number> PathSeries = new XYChart.Series<>();
+                    PathSeries.setName("Path");
+                    PathSeries.getData().add(new XYChart.Data("A Star", simresults.pathLength));
+                    pathLenBarChart.getData().add(PathSeries);
 
-        // Num. Successes BarChart
-        XYChart.Series<String, Number> SuccessSeries = new XYChart.Series<>();
-        SuccessSeries.setName("Num. Successes");
-        SuccessSeries.getData().add(new XYChart.Data("ASTAR", batch.ASTAR_Successes));
-        SuccessSeries.getData().add(new XYChart.Data("Dijkstra", batch.DIJKSTRA_Successes));
-        successBarChart.getData().add(SuccessSeries);
+
+                    // Success BarChart
+                    XYChart.Series<String, Number> SuccessSeries = new XYChart.Series<>();
+                    SuccessSeries.setName("Success");
+                    SuccessSeries.getData().add(new XYChart.Data("A Star", simresults.isReachedGoal() ? 1 : 0));
+                    successBarChart.getData().add(SuccessSeries);
+                }
+            } else {
+                System.out.println("performing batch simulations");
+                batch.RunSimulations(Integer.parseInt(numBatchesInput.getText()));
+
+                // Avg. Runtime BarChart
+                XYChart.Series<String, Number> runtimeSeries = new XYChart.Series<>();
+                runtimeSeries.setName("Avg. Runtime (ms)");
+                runtimeSeries.getData().add(new XYChart.Data("ASTAR", batch.ASTAR_Total_Time));
+                runtimeSeries.getData().add(new XYChart.Data("Dijkstra", batch.DIJKSTRA_Total_Time));
+                runtimeBarChart.getData().add(runtimeSeries);
+
+                // Nodes BarChart
+                XYChart.Series<String, Number> NodesSeries = new XYChart.Series<>();
+                NodesSeries.setName("Avg. Nodes");
+                NodesSeries.getData().add(new XYChart.Data("ASTAR", batch.ASTAR_Average_Nodes));
+                NodesSeries.getData().add(new XYChart.Data("Dijkstra", batch.DIJKSTRA_Average_Nodes));
+                nodesBarChart.getData().add(NodesSeries);
+
+                // Path Length BarChart
+                XYChart.Series<String, Number> PathSeries = new XYChart.Series<>();
+                PathSeries.setName("Avg. Path");
+                PathSeries.getData().add(new XYChart.Data("ASTAR", batch.ASTAR_Average_Path));
+                PathSeries.getData().add(new XYChart.Data("Dijkstra", batch.DIJKSTRA_Average_Path));
+                pathLenBarChart.getData().add(PathSeries);
+
+                // Num. Successes BarChart
+                XYChart.Series<String, Number> SuccessSeries = new XYChart.Series<>();
+                SuccessSeries.setName("Num. Successes");
+                SuccessSeries.getData().add(new XYChart.Data("ASTAR", batch.ASTAR_Successes));
+                SuccessSeries.getData().add(new XYChart.Data("Dijkstra", batch.DIJKSTRA_Successes));
+                successBarChart.getData().add(SuccessSeries);
+            }
+
+
+        }
+        catch(Exception e)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error: Please Validate Inputs");
+            alert.showAndWait();
+        }
     }
 }

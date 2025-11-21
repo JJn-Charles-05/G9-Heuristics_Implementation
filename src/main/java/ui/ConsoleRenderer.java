@@ -5,8 +5,17 @@ import core.Grid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javafx.scene.control.TextArea;
 
 public class ConsoleRenderer {
+    private TextArea textArea;
+
+    public ConsoleRenderer(){}
+
+    public ConsoleRenderer(TextArea textArea){
+        this.textArea = textArea;
+    }
+
     public void draw(Grid grid, List<int[]> path) {
         Set<Long> pathCells = new HashSet<>();
         if (path != null) {

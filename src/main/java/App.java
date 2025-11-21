@@ -2,25 +2,39 @@ import core.Settings;
 import sim.BatchSimulation;
 import sim.Simulation;
 import ui.ConsoleRenderer;
-import javafx.scene.Scene;
+
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.control.Label;
+import javafx.scene.Parent;
+
+import java.io.IOException;
 
 public class App extends Application {
     @Override
     public void start(Stage stage) {
-        Label label = new Label("Hello, World!");
-        Scene scene = new Scene(label, 400, 400);
-        stage.setTitle("JavaFX");
-        stage.setScene(scene);
-        stage.show();
+        System.out.println("testing batch simulations");
+        BatchSimulation batch = new BatchSimulation();
+        batch.RunSimulations(5);
+        try {
+            System.out.println(getClass().getResource("/heuristicCompareGUI.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/heuristicCompareGUI.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root, 600, 650);
+            stage.setTitle("Heuristics Comparison GUI");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("!! - FXML failed to load!");
+        }
     }
 
     public static void main(String[] args) {
         launch(args);
 
-        Settings s = new Settings();
+        /*Settings s = new Settings();
         s.width = 20;
         s.height = 12;
         s.obstacleDensity = 0.18;
@@ -35,6 +49,6 @@ public class App extends Application {
 
         System.out.println("performing batch simulations");
         BatchSimulation batch = new BatchSimulation();
-        batch.RunSimulations(10);
+        batch.RunSimulations(10);*/
     }
 }

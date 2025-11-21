@@ -66,6 +66,9 @@ public class MainController {
     private TextField heightInput;
 
     @FXML
+    private TextArea statsArea;
+
+    @FXML
     private TextField odInput;
 
     @FXML
@@ -114,6 +117,9 @@ public class MainController {
         uiSeedLabel.setDisable(false);
         numBatchesInput.setDisable(true);
         uiNumBatchesLabel.setDisable(true);
+        algoInput.setDisable(false);
+        statsArea.setText("");
+        textArea.setText("");
     }
 
     @FXML
@@ -128,6 +134,9 @@ public class MainController {
         uiSeedLabel.setDisable(true);
         numBatchesInput.setDisable(false);
         uiNumBatchesLabel.setDisable(false);
+        algoInput.setDisable(true);
+        statsArea.setText("");
+        textArea.setText("");
     }
 
     @FXML
@@ -166,13 +175,21 @@ public class MainController {
             } else {
                 s.algo = Settings.Algorithm.ASTAR;
             }
-            s.seed = Long.parseLong(seedInput.getText());
+
+            // add check for batch or single
+            if(singleSimRadio.isSelected()) {
+                s.seed = Long.parseLong(seedInput.getText());
+            }
+
             BatchSimulation batch = new BatchSimulation(s);
             if (singleSimRadio.isSelected()) {
                 Simulation sim = new Simulation(s, new ConsoleRenderer(textArea));
                 SimulationResult simresults;
                 simresults = sim.run();
                 simnum += 1;
+
+                statsArea.appendText("Sim: " + simresults.toString() + "\n");
+
 
                 if(algoInput.getText().contains("Dijkstras")) {
                     // Runtime BarChart
@@ -200,6 +217,7 @@ public class MainController {
                     SuccessSeries.setName("Success");
                     SuccessSeries.getData().add(new XYChart.Data("Dijkstras", simresults.isReachedGoal() ? 1 : 0));
                     successBarChart.getData().add(SuccessSeries);
+
                 }
                 else
                 {
@@ -259,6 +277,7 @@ public class MainController {
                 SuccessSeries.getData().add(new XYChart.Data("ASTAR", batch.ASTAR_Successes));
                 SuccessSeries.getData().add(new XYChart.Data("Dijkstra", batch.DIJKSTRA_Successes));
                 successBarChart.getData().add(SuccessSeries);
+                statsArea.setText(batch.toString());
             }
 
 

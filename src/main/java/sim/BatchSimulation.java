@@ -13,6 +13,8 @@ public class BatchSimulation
     public long ASTAR_Total_Time;
     public long DIJKSTRA_Total_Time;
 
+    private int numberOfSimulations;
+
     public Settings settings;
 
     // avg path length
@@ -38,6 +40,7 @@ public class BatchSimulation
 
     public void RunSimulations(int numberOfSimulations)
     {
+        this.numberOfSimulations = numberOfSimulations;
         Simulation sim;
         if(settings == null)
         {
@@ -106,5 +109,16 @@ public class BatchSimulation
         DIJKSTRA_Average_Nodes = DIJKSTRA_Average_Nodes / numberOfSimulations;
         System.out.println("=== Done ===");
 
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("Batch Simulation Results:\n" +
+                        "Number of simulations: %d\n" +
+                        "ASTAR \n Total Time: %d ms \n Average Path Length: %.2f \n Successes: %.0f \n Average Nodes Expanded: %.2f\n" +
+                        "DIJKSTRA \n Total Time: %d ms \n Average Path Length: %.2f \n Successes: %.0f \n Average Nodes Expanded: %.2f\n",
+                numberOfSimulations, ASTAR_Total_Time, ASTAR_Average_Path, ASTAR_Successes, ASTAR_Average_Nodes,
+                DIJKSTRA_Total_Time, DIJKSTRA_Average_Path, DIJKSTRA_Successes, DIJKSTRA_Average_Nodes);
     }
 }

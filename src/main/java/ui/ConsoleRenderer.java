@@ -40,7 +40,7 @@ public class ConsoleRenderer {
             }
             sb.append('\n');
         }
-        System.out.print(sb.toString());
+        // System.out.print(sb.toString());
         if(textArea != null)
         {
             textArea.setText(sb.toString());

@@ -5,14 +5,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="725.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.MainController">
+<AnchorPane prefHeight="729.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.MainController">
    <children>
       <Label id="titleLabel" fx:id="titleLabel" layoutX="271.0" layoutY="14.0" text="Heuristics Comparison GUI">
          <font>
             <Font size="26.0" />
          </font></Label>
       <Button id="runSimButton" fx:id="runSimButton" layoutX="73.0" layoutY="602.0" mnemonicParsing="false" onAction="#runSimulations" text="Run Sim" />
-      <BarChart id="runtimeBarChart" fx:id="runtimeBarChart" layoutX="375.0" layoutY="337.0" prefHeight="162.0" prefWidth="184.0" title="Avg Runtime">
+      <BarChart id="runtimeBarChart" fx:id="runtimeBarChart" layoutX="383.0" layoutY="315.0" prefHeight="209.0" prefWidth="276.0" title="Avg Runtime">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>
@@ -20,7 +20,7 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </BarChart>
-      <BarChart id="nodesBarChart" fx:id="nodesBarChart" layoutX="635.0" layoutY="337.0" prefHeight="162.0" prefWidth="184.0" title="Num. Nodes">
+      <BarChart id="nodesBarChart" fx:id="nodesBarChart" layoutX="674.0" layoutY="523.0" prefHeight="209.0" prefWidth="276.0" title="Num. Nodes">
          <xAxis>
             <CategoryAxis side="BOTTOM" />
          </xAxis>
@@ -28,7 +28,7 @@
             <NumberAxis side="LEFT" />
          </yAxis>
       </BarChart>
-      <BarChart id="pathLenBarChart" fx:id="pathLenBarChart" layoutX="371.0" layoutY="521.0" prefHeight="162.0" prefWidth="184.0" title="Path Lenghts">
+      <BarChart id="pathLenBarChart" fx:id="pathLenBarChart" layoutX="383.0" layoutY="523.0" prefHeight="209.0" prefWidth="276.0" title="Path Lenghts">
          <xAxis>
             <CategoryAxis side="BOTTOM" />
          </xAxis>
@@ -36,7 +36,7 @@
             <NumberAxis side="LEFT" />
          </yAxis>
       </BarChart>
-      <BarChart id="successBarChart" fx:id="successBarChart" layoutX="631.0" layoutY="521.0" prefHeight="162.0" prefWidth="184.0" title="Num. Successes">
+      <BarChart id="successBarChart" fx:id="successBarChart" layoutX="674.0" layoutY="315.0" prefHeight="209.0" prefWidth="276.0" title="Num. Successes">
          <xAxis>
             <CategoryAxis side="BOTTOM" />
          </xAxis>
@@ -44,7 +44,7 @@
             <NumberAxis side="LEFT" />
          </yAxis>
       </BarChart>
-      <TextArea id="textArea" fx:id="textArea" layoutX="464.0" layoutY="97.0" prefHeight="209.0" prefWidth="290.0" />
+      <TextArea id="textArea" fx:id="textArea" layoutX="396.0" layoutY="97.0" prefHeight="209.0" prefWidth="290.0" />
       <RadioButton id="singleSimRadio" fx:id="singleSimRadio" layoutX="24.0" layoutY="111.0" mnemonicParsing="false" onAction="#setSingleSimRadio" text="Single Simulation" />
       <RadioButton id="batchSimRadio" fx:id="batchSimRadio" layoutX="24.0" layoutY="144.0" mnemonicParsing="false" onAction="#setBatchSimRadio" text="Batch Simulation" />
       <VBox layoutX="24.0" layoutY="175.0" prefHeight="408.0" prefWidth="219.0" spacing="4.0">
@@ -116,7 +116,13 @@
          <font>
             <Font size="16.0" />
          </font></Label>
-      <Label layoutX="480.0" layoutY="72.0" text="Simulation Visual (Single Sim. ONLY)">
+      <Label layoutX="412.0" layoutY="72.0" text="Simulation Visual (Single Sim. ONLY)">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="statsArea" layoutX="702.0" layoutY="97.0" prefHeight="209.0" prefWidth="219.0" />
+      <Label layoutX="764.0" layoutY="72.0" text="Runtime Stats">
          <font>
             <Font size="16.0" />
          </font>
